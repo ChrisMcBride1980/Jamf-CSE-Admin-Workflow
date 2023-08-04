@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# Set the desired username for the admin account
+# replace test with whatever account you want
+USERNAME="Test"
+
+# Create the admin account with a random password
+echo "Creating admin account..."
+
+echo "$PASSWORD"
+
+# Create the new user
+
+sudo sysadminctl -addUser  -password test -fullName ${USERNAME} -shell /bin/bash -home /Users/Test -UID 532 -admin
+
+# ensuring user is set as an admin 
+sudo dseditgroup -o edit -a ${USERNAME} -t user admin
+
+# Generate a random password
+PASSWORD=$(openssl rand -base64 12)
+echo "$USERNAME:$PASSWORD" 
+
+#Changes the password to the store variable - rename test
+sudo dscl . -passwd /Users/tes ${PASSWORD}
+
+# Display the password to the user
+echo "Admin account created with the following password:"
+echo "$PASSWORD"
+
+preDialog=$(date +%s)
+
+/usr/local/bin/dialog -t "University of Glasgow Temporary Admin Account" -m "Your admin username is "${USERNAME}". \n\n This is your admin account password -- ${PASSWORD}.  \n\n This account will be deleted automatically in 15 minutes.\n\n If you need further admin access you must request this through the IT Helpdesk which you can contact on 0141 330 4800". --timer 60 --button1text "Ok" --bannerimage "/Library/Application Support/JAMF/glasgow/jcbanner-white.png" --icon "$( defaults read /Library/Preferences/com.jamfsoftware.jamf.plist self_service_app_path )" --overlayicon "/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/UnlockedIcon.icns" --infobox "### Aditional Info\n\n#### V 1.0 \n#### IT Helpdesk  \n - 0141 330 4800  \n - MyMac Ops Team" --height 50%
+postDialog=$(date +%s)
+
+elapsedTime=$(( postDialog - preDialog ))
+
+echo "$elapsedTime"
+
+exit  0

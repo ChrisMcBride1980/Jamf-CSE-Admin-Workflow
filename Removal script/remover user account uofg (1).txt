@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# Deletes the admin user you specify 
+dscl . -delete "Replace with path to your user"
+		
+	
+	
+exit 0

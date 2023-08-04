@@ -1,0 +1,3 @@
+#Create a policy and under files and processes add the below command to the execute option.  This creates a Launch Daemon to look for the admin account
+
+/usr/local/bin/jamf scheduledTask -command "/usr/local/bin/REMOVEUSER1.sh" -name Remove-User3 -runAtLoad -user root -startDelay 900
